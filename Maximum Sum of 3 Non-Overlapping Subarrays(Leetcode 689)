@@ -1,0 +1,42 @@
+class Solution {
+    public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
+        int n = nums.length;
+        int maxi = 0;
+        int[] arr = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            arr[i + 1] = arr[i] + nums[i];
+        }
+        int[] arr1 = new int[n];
+        int[] arr2 = new int[n];
+        int[] result = new int[3];
+        for (int i = k, j = arr[k] - arr[0];i < n;i++) {
+            if (arr[i + 1] - arr[i + 1 - k] > j) {
+                arr1[i] = i + 1 - k;
+                j = arr[i + 1] - arr[i + 1 - k];
+            } else {
+                arr1[i] = arr1[i - 1];
+            }
+        }
+        arr2[n - k] = n - k;
+        for (int i = n - k - 1, j= arr[n] - arr[n - k];i >= 0;i--) {
+            if (arr[i + k] - arr[i] >= j) {
+                arr2[i] = i;
+                j = arr[i + k] - arr[i];
+            } else {
+                arr2[i] = arr2[i + 1];
+            }
+        }
+        for (int i = k; i <= n - 2 * k; i++) {
+            int x = arr1[i - 1];
+            int y = arr2[i + k];
+            int sum =(arr[i + k] - arr[i]) +(arr[x + k] - arr[x]) +(arr[y + k] - arr[y]);
+            if (sum > maxi) {
+                maxi = sum;
+                result[0] = x;
+                result[1] = i;
+                result[2] = y;
+            }
+        }
+        return result;
+    }
+}
